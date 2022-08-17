@@ -35,8 +35,13 @@ public class MyLoggerProvider : ILoggerProvider
             return logLevel >= LogLevel.Information;
         }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
-            Func<TState, Exception, string> formatter)
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception exception,
+            Func<TState, Exception, string> formatter
+        )
         {
             _logs.Add(formatter(state, exception));
             //Console.WriteLine(formatter(state, exception));

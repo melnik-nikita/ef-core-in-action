@@ -1,4 +1,5 @@
 namespace Introduction;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ public static class Commands
         using (var db = new AppDbContext())
         {
             foreach (var book in db.Books.AsNoTracking()
-                .Include(book => book.Author))
+                         .Include(book => book.Author))
             {
                 var webUrl = book.Author.WebUrl ?? "- no web url given -";
                 Console.WriteLine($"{book.Title} by {book.Author.Name}");
@@ -65,17 +66,20 @@ public static class Commands
             loggerFactory.AddProvider(new MyLoggerProvider(logs));
 
             foreach (var entity in
-                db.Books.AsNoTracking()
-                    .Include(book => book.Author))
+                     db.Books.AsNoTracking()
+                         .Include(book => book.Author))
             {
                 var webUrl = entity.Author.WebUrl == null
                     ? "- no web url given -"
                     : entity.Author.WebUrl;
                 Console.WriteLine(
-                    $"{entity.Title} by {entity.Author.Name}");
-                Console.WriteLine("     " +
-                                  $"Published on {entity.PublishedOn:dd-MMM-yyyy}" +
-                                  $". {webUrl}");
+                    $"{entity.Title} by {entity.Author.Name}"
+                );
+                Console.WriteLine(
+                    "     " +
+                    $"Published on {entity.PublishedOn:dd-MMM-yyyy}" +
+                    $". {webUrl}"
+                );
             }
         }
 
@@ -139,43 +143,39 @@ public static class Commands
 
     public static void WriteTestData(this AppDbContext db)
     {
-        var martinFowler = new Author
-        {
-            Name = "Martin Fowler",
-            WebUrl = "http://martinfowler.com/"
-        };
+        var martinFowler = new Author { Name = "Martin Fowler", WebUrl = "http://martinfowler.com/" };
 
         var books = new List<Book>
+        {
+            new Book
             {
-                new Book
-                {
-                    Title = "Refactoring",
-                    Description = "Improving the design of existing code",
-                    PublishedOn = new DateTime(1999, 7, 8),
-                    Author = martinFowler
-                },
-                new Book
-                {
-                    Title = "Patterns of Enterprise Application Architecture",
-                    Description = "Written in direct response to the stiff challenges",
-                    PublishedOn = new DateTime(2002, 11, 15),
-                    Author = martinFowler
-                },
-                new Book
-                {
-                    Title = "Domain-Driven Design",
-                    Description = "Linking business needs to software design",
-                    PublishedOn = new DateTime(2003, 8, 30),
-                    Author = new Author {Name = "Eric Evans", WebUrl = "http://domainlanguage.com/"}
-                },
-                new Book
-                {
-                    Title = "Quantum Networking",
-                    Description = "Entangled quantum networking provides faster-than-light data communications",
-                    PublishedOn = new DateTime(2057, 1, 1),
-                    Author = new Author {Name = "Future Person"}
-                }
-            };
+                Title = "Refactoring",
+                Description = "Improving the design of existing code",
+                PublishedOn = new DateTime(1999, 7, 8),
+                Author = martinFowler
+            },
+            new Book
+            {
+                Title = "Patterns of Enterprise Application Architecture",
+                Description = "Written in direct response to the stiff challenges",
+                PublishedOn = new DateTime(2002, 11, 15),
+                Author = martinFowler
+            },
+            new Book
+            {
+                Title = "Domain-Driven Design",
+                Description = "Linking business needs to software design",
+                PublishedOn = new DateTime(2003, 8, 30),
+                Author = new Author { Name = "Eric Evans", WebUrl = "http://domainlanguage.com/" }
+            },
+            new Book
+            {
+                Title = "Quantum Networking",
+                Description = "Entangled quantum networking provides faster-than-light data communications",
+                PublishedOn = new DateTime(2057, 1, 1),
+                Author = new Author { Name = "Future Person" }
+            }
+        };
 
         db.Books.AddRange(books);
         db.SaveChanges();
